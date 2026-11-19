@@ -1,4 +1,4 @@
-// Optica 4K - Client-Side In-Browser Video Enhancement Engine
+// Optica - Client-Side In-Browser Video Enhancement Engine
 
 let ffmpeg = null;
 let isEngineReady = false;

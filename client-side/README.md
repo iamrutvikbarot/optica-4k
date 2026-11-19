@@ -1,8 +1,8 @@
-# Optica 4K — In-Browser Client-Side Edition (WebAssembly)
+# Optica — In-Browser Client-Side Edition (WebAssembly)
 
 > **Zero Cloud Server Costs • Runs 100% On The Visitor's Mac / PC CPU & RAM • 100% Private**
 
-🌐 **Live Web Application**: [https://client-side-olive.vercel.app](https://client-side-olive.vercel.app)
+🌐 **Live Web Application**: [https://optica-video.vercel.app](https://optica-video.vercel.app) (also at [https://opticavideo.vercel.app](https://opticavideo.vercel.app))
 💻 **GitHub Repository**: [https://github.com/iamrutvikbarot/optica-4k](https://github.com/iamrutvikbarot/optica-4k)
 
 This version uses **FFmpeg.wasm** (FFmpeg compiled directly into WebAssembly with SIMD / multi-threading support). 

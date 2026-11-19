@@ -1,8 +1,8 @@
-# Optica 4K — Free Non-AI Video Enhancer & 2K/4K Upscaler
+# Optica — Free Non-AI Video Enhancer & 2K/4K Upscaler
 
 > **100% Free • Unlimited • Zero Cloud Fees • 100% Private (Runs Locally) • Zero AI Hallucinations**
 
-🌐 **Live Web Application (In-Browser)**: [https://client-side-olive.vercel.app](https://client-side-olive.vercel.app)  
+🌐 **Live Web Application (In-Browser)**: [https://optica-video.vercel.app](https://optica-video.vercel.app) (also at [https://opticavideo.vercel.app](https://opticavideo.vercel.app))  
 💻 **GitHub Repository**: [https://github.com/iamrutvikbarot/optica-4k](https://github.com/iamrutvikbarot/optica-4k)
 
 A complete, dual-engine video enhancement and upscaling system built specifically for creators and users who want to upscale their videos to **2K (1440p)** or **4K (2160p)** and enhance video sharpness, contrast, and clarity **without spending money on expensive AI APIs, cloud subscriptions, or heavy GPU hardware**.
