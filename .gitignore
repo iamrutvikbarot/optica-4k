@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+venv/
+ENV/
+
+# Output and Upload caches
+uploads/*
+!uploads/.gitkeep
+outputs/*
+!outputs/.gitkeep
+*.mp4
+!client-side/sample.mp4
+
+# Vercel
+.vercel/
+client-side/.vercel/
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Agent local cache
+.agents/

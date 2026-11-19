@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureScale 4K - Free Non-AI Video Enhancer & 2K/4K Upscaler</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">PureScale <span class="accent-text">4K</span></h1>
+          <p class="brand-tagline">Zero-Cost Mathematical Video Upscaler & Quality Enhancer</p>
+        </div>
+      </div>
+      <div class="tech-pills">
+        <span class="pill"><span class="dot emerald"></span> 100% Free & Local</span>
+        <span class="pill"><span class="dot cyan"></span> AMD FidelityFX CAS</span>
+        <span class="pill"><span class="dot blue"></span> Lanczos-3 Sinc Filter</span>
+        <span class="pill"><span class="dot purple"></span> Zero AI Hallucinations</span>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- STEP 1: Upload Card -->
+      <section id="uploadSection" class="card upload-card active-step">
+        <div class="upload-dropzone" id="dropZone">
+          <input type="file" id="videoFileInput" accept="video/mp4,video/quicktime,video/x-matroska,video/x-msvideo,video/webm" hidden>
+          <div class="upload-icon-wrapper">
+            <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <h2 class="upload-heading">Drag & Drop Your Video Here</h2>
+          <p class="upload-subtext">Supports MP4, MOV, MKV, WebM, AVI • Any duration • Up to 2GB</p>
+          <div class="upload-btn-row">
+            <button class="btn btn-primary" id="selectFileBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+              Browse Video File
+            </button>
+            <button class="btn btn-secondary" id="demoSampleBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+              Generate Demo Sample
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Configure & Preview Section -->
+      <section id="configSection" class="card config-card hidden">
+        <div class="config-grid">
+          
+          <!-- Left: Original Video Preview & Specs -->
+          <div class="preview-panel">
+            <h3 class="panel-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+              Input Video
+            </h3>
+            <div class="video-container">
+              <video id="inputVideoPlayer" controls playsinline></video>
+            </div>
+            
+            <div class="specs-grid" id="originalSpecs">
+              <div class="spec-item">
+                <span class="spec-label">Resolution</span>
+                <span class="spec-value" id="specRes">--</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Framerate</span>
+                <span class="spec-value" id="specFps">--</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Duration</span>
+                <span class="spec-value" id="specDuration">--</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">File Size</span>
+                <span class="spec-value" id="specSize">--</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Codec</span>
+                <span class="spec-value" id="specCodec">--</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Audio</span>
+                <span class="spec-value" id="specAudio">--</span>
+              </div>
+            </div>
+
+            <button class="btn btn-outline full-width" id="changeVideoBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 15h2m-2-4h2m-2-4h2m-6 4H3m18 0h-2M4 7h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"></path></svg>
+              Choose Different Video
+            </button>
+          </div>
+
+          <!-- Right: Enhancement Engine Configuration -->
+          <div class="settings-panel">
+            <h3 class="panel-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              Enhancement Configuration
+            </h3>
+
+            <!-- 1. Target Resolution Selection -->
+            <div class="control-group">
+              <label class="control-label">Target Resolution</label>
+              <div class="resolution-options">
+                <label class="res-card active" data-res="2k">
+                  <input type="radio" name="resMode" value="2k" checked>
+                  <div class="res-badge-top">Recommended</div>
+                  <div class="res-title">2K QHD</div>
+                  <div class="res-desc">2560 × 1440</div>
+                  <div class="res-sub">Fast, ultra-crisp & unlocks YouTube's VP9 high-bitrate codec</div>
+                </label>
+
+                <label class="res-card" data-res="4k">
+                  <input type="radio" name="resMode" value="4k">
+                  <div class="res-badge-top ultra">Ultra Detail</div>
+                  <div class="res-title">4K UHD</div>
+                  <div class="res-desc">3840 × 2160</div>
+                  <div class="res-sub">4× pixel density for large 4K displays and pristine clarity</div>
+                </label>
+
+                <label class="res-card" data-res="1080p">
+                  <input type="radio" name="resMode" value="1080p">
+                  <div class="res-title">1080p FHD</div>
+                  <div class="res-desc">1920 × 1080</div>
+                  <div class="res-sub">Ideal for 480p/720p footage remastering</div>
+                </label>
+
+                <label class="res-card" data-res="2x">
+                  <input type="radio" name="resMode" value="2x">
+                  <div class="res-title">2× Native</div>
+                  <div class="res-desc">Exact 200% Scale</div>
+                  <div class="res-sub">Doubles width & height maintaining custom aspect ratios</div>
+                </label>
+              </div>
+            </div>
+
+            <!-- 2. Enhancement Preset Selection -->
+            <div class="control-group">
+              <label class="control-label">Enhancement Algorithm Preset</label>
+              <div class="preset-options">
+                <label class="preset-card active" data-preset="cinematic">
+                  <input type="radio" name="preset" value="cinematic" checked>
+                  <div class="preset-header">
+                    <span class="preset-name">🌟 Cinematic Remaster</span>
+                    <span class="preset-tag">Balanced</span>
+                  </div>
+                  <p class="preset-desc">Lanczos-3 sinc interpolation + AMD CAS (0.55) + Gentle 3D denoise + Filmic dynamic range</p>
+                </label>
+
+                <label class="preset-card" data-preset="ultra_sharp">
+                  <input type="radio" name="preset" value="ultra_sharp">
+                  <div class="preset-header">
+                    <span class="preset-name">⚡ Ultra Sharp & Clean</span>
+                    <span class="preset-tag">Anime / Gaming</span>
+                  </div>
+                  <p class="preset-desc">High AMD CAS (0.75) + Unsharp contours for razor-sharp vector lines, text, and gameplay</p>
+                </label>
+
+                <label class="preset-card" data-preset="clean_denoise">
+                  <input type="radio" name="preset" value="clean_denoise">
+                  <div class="preset-header">
+                    <span class="preset-name">🧼 Denoise & Smooth</span>
+                    <span class="preset-tag">Low-Light / Grain</span>
+                  </div>
+                  <p class="preset-desc">Spatial-temporal 3D denoiser removes sensor noise & macroblocking before upscaling</p>
+                </label>
+
+                <label class="preset-card" data-preset="vivid_hdr">
+                  <input type="radio" name="preset" value="vivid_hdr">
+                  <div class="preset-header">
+                    <span class="preset-name">🌈 Vivid Dynamic Cinema</span>
+                    <span class="preset-tag">HDR-Look</span>
+                  </div>
+                  <p class="preset-desc">Remastered color saturation & micro-contrast boost for vibrant, rich scenes</p>
+                </label>
+
+                <label class="preset-card" data-preset="custom">
+                  <input type="radio" name="preset" value="custom">
+                  <div class="preset-header">
+                    <span class="preset-name">🛠️ Studio Custom Tuning</span>
+                    <span class="preset-tag">Manual</span>
+                  </div>
+                  <p class="preset-desc">Full manual control over CAS sharpening, denoise strength, vibrance, and CRF</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Custom Tuning Drawer (Collapsible) -->
+            <div id="customControlsDrawer" class="custom-drawer hidden">
+              <div class="drawer-header">Custom Studio Parameters</div>
+              <div class="sliders-grid">
+                <div class="slider-row">
+                  <div class="slider-info">
+                    <span>AMD CAS Sharpening</span>
+                    <span id="valCas" class="slider-val">0.55</span>
+                  </div>
+                  <input type="range" id="inputCas" min="0.0" max="1.0" step="0.05" value="0.55">
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-info">
+                    <span>Unsharp Edge Mask</span>
+                    <span id="valUnsharp" class="slider-val">0.0</span>
+                  </div>
+                  <input type="range" id="inputUnsharp" min="0.0" max="1.5" step="0.1" value="0.0">
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-info">
+                    <span>3D Denoise Level</span>
+                    <span id="valDenoise" class="slider-val">low</span>
+                  </div>
+                  <select id="selectDenoise" class="select-field">
+                    <option value="none">None (Preserve 100% film grain)</option>
+                    <option value="low" selected>Low (Gentle cleanup)</option>
+                    <option value="medium">Medium (Standard)</option>
+                    <option value="high">High (Noisy/vintage footage)</option>
+                  </select>
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-info">
+                    <span>Contrast Lift</span>
+                    <span id="valContrast" class="slider-val">1.04</span>
+                  </div>
+                  <input type="range" id="inputContrast" min="0.9" max="1.2" step="0.01" value="1.04">
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-info">
+                    <span>Vibrance / Saturation</span>
+                    <span id="valSaturation" class="slider-val">1.06</span>
+                  </div>
+                  <input type="range" id="inputSaturation" min="0.9" max="1.3" step="0.02" value="1.06">
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-info">
+                    <span>Video Quality (CRF)</span>
+                    <span id="valCrf" class="slider-val">19 (High Fidelity)</span>
+                  </div>
+                  <input type="range" id="inputCrf" min="16" max="24" step="1" value="19">
+                </div>
+              </div>
+            </div>
+
+            <!-- Start Button -->
+            <button class="btn btn-action full-width" id="startProcessBtn">
+              <span class="btn-icon">✨</span>
+              <span>Enhance & Upscale Video</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- STEP 3: Live Progress Section -->
+      <section id="progressSection" class="card progress-card hidden">
+        <div class="progress-content">
+          <div class="progress-header">
+            <div class="spinner-ring"></div>
+            <div>
+              <h2 class="progress-title">Enhancing Video Stream...</h2>
+              <p class="progress-status-text" id="statusMessage">Applying Lanczos-3 interpolation & AMD CAS filters...</p>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
+          </div>
+          <div class="progress-percentage-row">
+            <span class="pct-text" id="progressPct">0%</span>
+            <span class="eta-text" id="progressEta">Estimating remaining time...</span>
+          </div>
+
+          <!-- Live Metrics Grid -->
+          <div class="live-metrics">
+            <div class="metric-card">
+              <span class="metric-label">Frame Progress</span>
+              <span class="metric-value" id="metricFrames">0 / 0</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Processing Speed</span>
+              <span class="metric-value" id="metricSpeed">0.0 fps</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Elapsed Time</span>
+              <span class="metric-value" id="metricElapsed">0.0s</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Processing Rate</span>
+              <span class="metric-value" id="metricRate">0.0x</span>
+            </div>
+          </div>
+
+          <div class="progress-actions">
+            <button class="btn btn-danger" id="cancelBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+              Cancel Processing
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4: Interactive Before & After Comparison -->
+      <section id="resultsSection" class="card results-card hidden">
+        <div class="results-header">
+          <div class="success-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Enhancement Complete!
+          </div>
+          <div class="results-btn-group">
+            <a id="downloadVideoBtn" class="btn btn-primary btn-large" href="#" download>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download Enhanced Video
+            </a>
+            <button id="restartBtn" class="btn btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              Enhance Another
+            </button>
+          </div>
+        </div>
+
+        <!-- Before / After Interactive Split-Screen Slider -->
+        <div class="comparison-container" id="comparisonContainer">
+          <div class="video-layer enhanced-layer">
+            <video id="enhancedVideoPlayer" playsinline loop></video>
+            <div class="layer-badge right">Enhanced (2K / 4K)</div>
+          </div>
+          <div class="video-layer original-layer" id="originalLayer">
+            <video id="comparisonOriginalVideo" playsinline loop muted></video>
+            <div class="layer-badge left">Original Source</div>
+          </div>
+          <!-- Draggable Slider Handle -->
+          <div class="split-slider-line" id="sliderHandle">
+            <div class="slider-button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Synchronized Media Controls -->
+        <div class="sync-controls">
+          <button class="btn-ctrl" id="syncPlayBtn" title="Play / Pause">
+            <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <svg id="pauseIcon" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+          </button>
+          <input type="range" id="syncTimeline" class="sync-timeline" min="0" max="100" step="0.1" value="0">
+          <span class="sync-time" id="syncTimeDisplay">0:00 / 0:00</span>
+          <button class="btn-ctrl" id="syncMuteBtn" title="Mute / Unmute">
+            <svg id="volumeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          </button>
+        </div>
+
+        <p class="slider-hint">💡 Drag the slider handle left or right to inspect the exact difference in sharpness, edges, and detail.</p>
+
+        <!-- Stats Comparison Table -->
+        <div class="stats-comparison-row">
+          <div class="stats-box">
+            <span class="sb-label">Original Resolution</span>
+            <span class="sb-value" id="statOrigRes">--</span>
+          </div>
+          <div class="stats-arrow">➔</div>
+          <div class="stats-box highlight">
+            <span class="sb-label">Enhanced Resolution</span>
+            <span class="sb-value" id="statEnhancedRes">--</span>
+          </div>
+          <div class="stats-box">
+            <span class="sb-label">Pixel Density Gain</span>
+            <span class="sb-value" id="statMultiplier">--</span>
+          </div>
+          <div class="stats-box">
+            <span class="sb-label">Render Time</span>
+            <span class="sb-value" id="statTime">--</span>
+          </div>
+          <div class="stats-box">
+            <span class="sb-label">Total Cost</span>
+            <span class="sb-value emerald-text">$0.00 Free</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Educational Architecture & Technology Section -->
+      <section class="card explainer-card">
+        <h3 class="explainer-heading">How Non-AI Video Enhancement Works</h3>
+        <p class="explainer-intro">
+          Unlike expensive AI models that cost \$10–\$50/month and hallucinate artificial textures or face distortions, <strong>pure mathematical signal processing</strong> provides artifact-free, 100% stable enhancement with zero cost:
+        </p>
+        
+        <div class="tech-steps-grid">
+          <div class="tech-step-item">
+            <div class="step-num">01</div>
+            <h4>3D Spatial-Temporal Denoise</h4>
+            <p>Cleans digital sensor noise, ISO grain, and compression macroblocks across preceding and succeeding frames before upscaling.</p>
+          </div>
+
+          <div class="tech-step-item">
+            <div class="step-num">02</div>
+            <h4>Lanczos-3 Sinc Resampling</h4>
+            <p>Interpolates new pixels using a windowed sinc mathematical function, preserving high-frequency edges far better than standard bicubic.</p>
+          </div>
+
+          <div class="tech-step-item">
+            <div class="step-num">03</div>
+            <h4>AMD Contrast Adaptive Sharpening</h4>
+            <p>Industry-standard CAS dynamically sharpens soft texture areas while preserving flat gradients and preventing halo rings around high-contrast edges.</p>
+          </div>
+
+          <div class="tech-step-item">
+            <div class="step-num">04</div>
+            <h4>YouTube 2K/4K VP9 Codec Unlock</h4>
+            <p>Upscaling to 1440p (2K) or 4K forces YouTube and streaming platforms to assign their premium, high-bitrate VP9/AV01 encoders instead of muddy 1080p AVC1.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>PureScale 4K • Open Source • 100% Local Video Enhancement Engine • Zero AI Cloud Fees</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

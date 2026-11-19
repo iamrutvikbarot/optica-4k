@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <title>Optica 4K — In-Browser Mathematical Video Upscaler</title>
+  
+  <!-- Cross-Origin Isolation Service Worker for SharedArrayBuffer -->
+  <script src="coi-serviceworker.js"></script>
+
+  <!-- Vercel Geist Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Local Same-Origin WebAssembly Scripts -->
+  <script src="ffmpeg.js"></script>
+  <script src="ffmpeg-util.js"></script>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="brand-group">
+        <div class="brand-icon-wrap" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="brand-svg">
+            <rect width="28" height="28" rx="7" fill="#0D0D0D" stroke="#262626" stroke-width="1"/>
+            <!-- 4 Corner Resolution Framing Brackets -->
+            <path d="M7 11V8C7 7.44772 7.44772 7 8 7H11" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+            <path d="M17 7H20C20.5523 7 21 7.44772 21 8V11" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+            <path d="M21 17V20C21 20.5523 20.5523 21 20 21H17" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+            <path d="M11 21H8C7.44772 21 7 20.5523 7 20V17" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+            <!-- Optical Iris Ring & Central Focus Core -->
+            <circle cx="14" cy="14" r="5" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="2 1.5"/>
+            <circle cx="14" cy="14" r="2.5" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <div class="brand-name">
+          <span>Optica</span>
+          <span class="badge-pill">4K</span>
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <div class="nav-privacy-pill" title="All processing occurs locally in your browser memory">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>100% Local &amp; Private</span>
+        </div>
+        <a href="https://github.com/iamrutvikbarot/optica-4k" target="_blank" rel="noopener noreferrer" class="v-btn v-btn-secondary nav-action-btn" aria-label="View source on GitHub">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="hero-announcement" role="presentation">
+          <span class="announcement-tag">Lossless</span>
+          <span class="announcement-text">In-Browser 4K Video Remastering</span>
+          <svg class="announcement-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+        <h1 class="hero-title">Studio Video Enhancement.<br>Without&nbsp;AI.</h1>
+        <p class="hero-description">
+          Upscale videos to 2K & 4K directly on your Mac or PC using AMD FidelityFX CAS and Lanczos-3 sinc resampling. 100% private, zero server costs, and zero AI distortions.
+        </p>
+      </section>
+
+      <!-- STEP 1: Upload Card -->
+      <section id="uploadSection" class="v-card" aria-label="Upload Video">
+        <div class="dropzone-box" id="dropZone" tabindex="0" role="button" aria-label="Drop video file here or click to browse">
+          <input type="file" id="videoFileInput" accept="video/mp4,video/quicktime,video/x-matroska,video/webm" hidden>
+          
+          <div class="dropzone-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+
+          <h2 class="dropzone-heading">Select a video file to upscale</h2>
+          <p class="dropzone-sub">Drag & drop or browse from your device • MP4, MOV, WebM, MKV</p>
+
+          <div class="dropzone-cta-row">
+            <button class="v-btn v-btn-primary" id="selectFileBtn" type="button">
+              Browse Video File
+            </button>
+            <button class="v-btn v-btn-secondary" id="demoSampleBtn" type="button">
+              Try Demo Sample
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Configure & Preview Section -->
+      <section id="configSection" class="v-card hidden" aria-label="Video Configuration">
+        <div class="studio-grid">
+
+          <!-- Left: Source Preview -->
+          <div>
+            <div class="panel-header">
+              <span>Source Preview</span>
+              <button class="v-btn v-btn-secondary" id="changeVideoBtn" type="button" style="font-size: 11px; padding: 4px 10px;">
+                Change File
+              </button>
+            </div>
+
+            <div class="video-view-wrap">
+              <video id="inputVideoPlayer" controls playsinline></video>
+            </div>
+
+            <div class="metadata-pills">
+              <div class="meta-chip">
+                <span class="meta-key">Resolution</span>
+                <span class="meta-val" id="specRes">--</span>
+              </div>
+              <div class="meta-chip">
+                <span class="meta-key">Duration</span>
+                <span class="meta-val" id="specDuration">--</span>
+              </div>
+              <div class="meta-chip">
+                <span class="meta-key">File Size</span>
+                <span class="meta-val" id="specSize">--</span>
+              </div>
+              <div class="meta-chip">
+                <span class="meta-key">Compute Target</span>
+                <span class="meta-val" style="color: var(--accent-emerald);">Local Device</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Studio Controls -->
+          <div>
+            <div class="panel-header">
+              <span>Enhancement Parameters</span>
+            </div>
+
+            <!-- Target Resolution -->
+            <div class="option-group">
+              <span class="section-label">Target Resolution</span>
+              <div class="segmented-res-grid" role="radiogroup" aria-label="Target Resolution Options">
+                <label class="res-pill active" data-res="2k">
+                  <input type="radio" name="resMode" value="2k" checked>
+                  <span class="res-tag-rec">Recommended</span>
+                  <div class="res-head">2K QHD</div>
+                  <div class="res-dims">2560 × 1440</div>
+                </label>
+
+                <label class="res-pill" data-res="4k">
+                  <input type="radio" name="resMode" value="4k">
+                  <div class="res-head">4K UHD</div>
+                  <div class="res-dims">3840 × 2160</div>
+                </label>
+
+                <label class="res-pill" data-res="1080p">
+                  <input type="radio" name="resMode" value="1080p">
+                  <div class="res-head">1080p FHD</div>
+                  <div class="res-dims">1920 × 1080</div>
+                </label>
+
+                <label class="res-pill" data-res="2x">
+                  <input type="radio" name="resMode" value="2x">
+                  <div class="res-head">2× Proportional</div>
+                  <div class="res-dims">Double Native</div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Preset Selection -->
+            <div class="option-group">
+              <span class="section-label">Algorithm Preset</span>
+              <div class="preset-list" role="radiogroup" aria-label="Algorithm Presets">
+                <label class="preset-pill active" data-preset="cinematic">
+                  <input type="radio" name="preset" value="cinematic" checked>
+                  <div class="preset-title-row">
+                    <span>Cinematic Remaster</span>
+                    <span class="badge-pill">Balanced</span>
+                  </div>
+                  <p class="preset-summary">Lanczos-3 windowed sinc filter with adaptive sharpening and dynamic range leveling.</p>
+                </label>
+
+                <label class="preset-pill" data-preset="ultra_sharp">
+                  <input type="radio" name="preset" value="ultra_sharp">
+                  <div class="preset-title-row">
+                    <span>Ultra-Sharp Contour</span>
+                    <span class="badge-pill">Gaming / Anime</span>
+                  </div>
+                  <p class="preset-summary">Enhanced unsharp masking for crisp text, UI elements, vector art, and game recordings.</p>
+                </label>
+
+                <label class="preset-pill" data-preset="vivid_hdr">
+                  <input type="radio" name="preset" value="vivid_hdr">
+                  <div class="preset-title-row">
+                    <span>Vivid Dynamic Range</span>
+                    <span class="badge-pill">Vibrant</span>
+                  </div>
+                  <p class="preset-summary">Micro-contrast tone expansion with gentle color vibrance boost.</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Start Button -->
+            <button class="v-btn v-btn-primary full-width v-btn-large" id="startProcessBtn" type="button">
+              Enhance Video (Run on Device)
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- STEP 3: Live Progress View -->
+      <section id="progressSection" class="v-card hidden" aria-label="Enhancement Progress">
+        <div class="progress-box">
+          <div class="pulse-spinner" aria-hidden="true"></div>
+          
+          <h2 class="progress-header-title">Rendering in Browser…</h2>
+          <p class="progress-header-sub" id="statusMessage">Your CPU is executing the mathematical sinc filters locally</p>
+
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+            <div class="progress-fill" id="progressBarFill" style="width: 0%"></div>
+          </div>
+
+          <div class="progress-nums-row">
+            <span class="progress-val-huge" id="progressPct">0%</span>
+            <span id="progressEta" style="align-self: flex-end;">Processing frames…</span>
+          </div>
+
+          <div class="live-stats-strip">
+            <div class="stat-item">
+              <span class="stat-item-lbl">Execution Mode</span>
+              <span class="stat-item-val">WebAssembly</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-item-lbl">Data Privacy</span>
+              <span class="stat-item-val" style="color: var(--accent-emerald);">100% Local</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-item-lbl">Server Cloud Cost</span>
+              <span class="stat-item-val">$0.00</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-item-lbl">Network Bandwidth</span>
+              <span class="stat-item-val">0 KB</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4: Results & Split Comparison -->
+      <section id="resultsSection" class="v-card hidden" aria-label="Upscaling Results">
+        <div class="results-head-bar">
+          <div class="success-chip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Enhancement Completed
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <a id="downloadVideoBtn" class="v-btn v-btn-primary" href="#" download="enhanced_video.mp4">
+              Download Enhanced Video
+            </a>
+            <button id="restartBtn" class="v-btn v-btn-secondary" type="button">
+              Enhance Another
+            </button>
+          </div>
+        </div>
+
+        <!-- Before / After Interactive Split-Screen Slider -->
+        <div class="comparison-stage" id="comparisonContainer" tabindex="0" role="slider" aria-label="Before and after comparison slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+          <div class="video-layer enhanced-layer">
+            <video id="enhancedVideoPlayer" playsinline loop></video>
+            <div class="layer-tag right">Enhanced (2K / 4K)</div>
+          </div>
+          <div class="video-layer original-layer" id="originalLayer">
+            <video id="comparisonOriginalVideo" playsinline loop muted></video>
+            <div class="layer-tag left">Original Source</div>
+          </div>
+          <div class="slider-divider" id="sliderHandle">
+            <div class="slider-thumb" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="media-control-dock">
+          <button class="ctrl-btn" id="syncPlayBtn" type="button" aria-label="Play or pause comparison videos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          </button>
+          <input type="range" id="syncTimeline" class="timeline-slider" min="0" max="100" step="0.1" value="0" aria-label="Timeline position">
+          <span class="time-counter" id="syncTimeDisplay">0:00 / 0:00</span>
+        </div>
+
+        <p style="font-size: 12px; color: var(--text-tertiary); text-align: center;">
+          Drag the center divider or use Left/Right arrow keys to inspect the sharpness and edge definition.
+        </p>
+      </section>
+
+      <!-- Technology Transparency Grid -->
+      <section class="v-card" style="margin-top: 40px;" aria-label="Architecture Explanation">
+        <div class="panel-header">
+          <span>Architecture & Mathematical Foundations</span>
+        </div>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; max-width: 800px; margin-bottom: 20px;">
+          Rather than relying on closed-source cloud models with recurring subscriptions, Optica compiles classical digital signal processing algorithms directly into the browser via WebAssembly:
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-tile">
+            <div class="tile-num">01</div>
+            <div class="tile-title">Zero Server Compute</div>
+            <p class="tile-desc">All frame interpolation is calculated by your client machine's processor. No cloud servers are loaded.</p>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-num">02</div>
+            <div class="tile-title">Lanczos-3 Sinc Filter</div>
+            <p class="tile-desc">Calculates high-order sinc interpolation curves to reconstruct sharp diagonal lines and high-frequency details.</p>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-num">03</div>
+            <div class="tile-title">Absolute Confidentiality</div>
+            <p class="tile-desc">Your video stream never transmits across any network. 100% processed and stored in client-side memory.</p>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-num">04</div>
+            <div class="tile-title">YouTube VP9 Codec</div>
+            <p class="tile-desc">Upscaling to 1440p forces YouTube to assign its premium VP9/AV01 encoder instead of blurry 1080p AVC1.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      Optica 4K • Built with Vercel Web Interface Guidelines & Emil Kowalski Motion • 100% Client-Side WebAssembly
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
